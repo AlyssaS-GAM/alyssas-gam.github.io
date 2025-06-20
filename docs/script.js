@@ -3,6 +3,12 @@ let flourPerClick = 1;
 let flourUpgradeLevel = 0;
 let flourUpgradeBaseCost = 10;
 
+let milk = 0;
+let milkUnlocked = false;
+
+let eggs = 0;
+let eggsUnlocked = false;
+
 const flourCountSpan = document.getElementById('flourCount');
 const flourButton = document.getElementById('flourButton');
 const flourUpgradeButton = document.getElementById('flourUpgrade');
