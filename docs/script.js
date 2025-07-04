@@ -1,13 +1,15 @@
-let flour = 0;
+let flour = 100;
 let flourPerClick = 1;
 let flourUpgradeLevel = 0;
 let flourUpgradeBaseCost = 10;
 
-let milk = 0;
+let milk = 50;
 let milkUnlocked = false;
 
 let eggs = 0;
 let eggsUnlocked = false;
+
+let waffles = 0;
 
 const flourCountSpan = document.getElementById('flourCount');
 const flourButton = document.getElementById('flourButton');
@@ -21,6 +23,9 @@ const milkSection = document.getElementById('milkSection');
 const eggCountSpan = document.getElementById('eggCount');
 const eggButton = document.getElementById('eggButton');
 const eggSection = document.getElementById('eggSection');
+
+const waffleCountSpan = document.getElementById('waffleCount');
+const waffleButton = document.getElementById('waffleButton');
 
 function updateDisplay() {
   flourCountSpan.textContent = flour;
@@ -39,10 +44,19 @@ function updateDisplay() {
     eggSection.style.display = 'block';
     eggButton.style.display = 'inline-block';
   }
+  // Unlock Waffles
+  if (flour >= 1 && milk >= 1 && eggs >= 1) {
+  waffleButton.disabled = false;
+} else {
+  waffleButton.disabled = true;
+}
 
   // Update count
   milkCountSpan.textContent = milk;
   eggCountSpan.textContent = eggs;
+  waffleCountSpan.textContent = waffles;
+
+
 }
 
 function getFlourUpgradeCost() {
@@ -73,5 +87,16 @@ eggButton.addEventListener('click', () => {
   eggs++;
   updateDisplay();
 });
+
+waffleButton.addEventListener('click', () => {
+  if (flour >= 1 && milk >= 1 && eggs >= 1) {
+    flour--;
+    milk--;
+    eggs--;
+    waffles++;
+    updateDisplay();
+  }
+});
+
 
 updateDisplay();
