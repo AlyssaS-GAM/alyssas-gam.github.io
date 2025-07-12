@@ -18,3 +18,8 @@ button {
 button:hover {
   background-color: #ffc107;
 }
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

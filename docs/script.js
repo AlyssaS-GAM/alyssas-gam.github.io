@@ -57,6 +57,7 @@ function createPassiveUpgrade(resourceName) {
   button.id = `${resourceName}PassiveUpgrade`;
   button.textContent = `Upgrade ${capitalize(resourceName)} (+1/sec) – Cost: ${passiveUpgrades[resourceName].currentCost}`;
   button.style.margin = '5px';
+  button.disabled = true;
 
   button.addEventListener('click', () => {
     const cost = passiveUpgrades[resourceName].currentCost;
@@ -106,6 +107,11 @@ function updateDisplay() {
   milkCountSpan.textContent = milk;
   eggCountSpan.textContent = eggs;
   waffleCountSpan.textContent = waffles;
+
+  // Enable passive upgrades when resources are unlocked
+document.getElementById('flourPassiveUpgrade').disabled = !milkUnlocked; // flour starts first
+document.getElementById('milkPassiveUpgrade').disabled = !milkUnlocked;
+document.getElementById('eggsPassiveUpgrade').disabled = !eggsUnlocked;
 }
 
 function getFlourUpgradeCost() {
