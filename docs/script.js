@@ -7,6 +7,11 @@ let milkUnlocked = false;
 let eggs = 0;
 let eggsUnlocked = false;
 let waffles = 0;
+let waffleCost = {
+  flour: 1,
+  milk: 1,
+  eggs: 1
+};
 
 const flourCountSpan = document.getElementById('flourCount');
 const flourButton = document.getElementById('flourButton');
@@ -103,15 +108,17 @@ function updateDisplay() {
     waffleButton.disabled = true;
   }
 
+  waffleButton.textContent = `Make Waffle (${waffleCost.flour}F / ${waffleCost.milk}M / ${waffleCost.eggs}E)`;
+
   // Update count
   milkCountSpan.textContent = milk;
   eggCountSpan.textContent = eggs;
   waffleCountSpan.textContent = waffles;
 
   // Enable passive upgrades when resources are unlocked
-document.getElementById('flourPassiveUpgrade').disabled = !milkUnlocked; // flour starts first
-document.getElementById('milkPassiveUpgrade').disabled = !milkUnlocked;
-document.getElementById('eggsPassiveUpgrade').disabled = !eggsUnlocked;
+  document.getElementById('flourPassiveUpgrade').disabled = !milkUnlocked; // flour starts first
+  document.getElementById('milkPassiveUpgrade').disabled = !milkUnlocked;
+  document.getElementById('eggsPassiveUpgrade').disabled = !eggsUnlocked;
 }
 
 function getFlourUpgradeCost() {
@@ -144,11 +151,21 @@ eggButton.addEventListener('click', () => {
 });
 
 waffleButton.addEventListener('click', () => {
-  if (flour >= 1 && milk >= 1 && eggs >= 1) {
-    flour--;
-    milk--;
-    eggs--;
+  if (
+    flour >= waffleCost.flour &&
+    milk >= waffleCost.milk &&
+    eggs >= waffleCost.eggs
+  ) {
+    flour -= waffleCost.flour;
+    milk -= waffleCost.milk;
+    eggs -= waffleCost.eggs;
     waffles++;
+
+    // Increase future waffle costs
+    waffleCost.flour++;
+    waffleCost.milk++;
+    waffleCost.eggs++;
+
     updateDisplay();
   }
 });
