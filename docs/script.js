@@ -1,3 +1,4 @@
+
 let flour = 0;
 let flourPerClick = 1;
 let flourUpgradeLevel = 0;
