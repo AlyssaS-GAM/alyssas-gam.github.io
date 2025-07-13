@@ -2,10 +2,19 @@ let flour = 0;
 let flourPerClick = 1;
 let flourUpgradeLevel = 0;
 let flourUpgradeBaseCost = 10;
+
 let milk = 0;
 let milkUnlocked = false;
+let milkClickPower = 1;
+let milkClickUpgradeLevel = 0;
+let milkClickBaseCost = 20;
+
 let eggs = 0;
 let eggsUnlocked = false;
+let eggClickPower = 1;
+let eggClickUpgradeLevel = 0;
+let eggClickBaseCost = 30;
+
 let waffles = 0;
 let waffleCost = {
   flour: 1,
@@ -16,13 +25,19 @@ let waffleCost = {
 const flourCountSpan = document.getElementById('flourCount');
 const flourButton = document.getElementById('flourButton');
 const flourUpgradeButton = document.getElementById('flourUpgrade');
+const flourPassiveUpgradeButton = document.getElementById('flourPassiveUpgrade');
 const flourUpgradeCostSpan = document.getElementById('flourUpgradeCost');
+
 const milkCountSpan = document.getElementById('milkCount');
 const milkButton = document.getElementById('milkButton');
+const milkPassiveUpgradeButton = document.getElementById('milkPassiveUpgrade');
 const milkSection = document.getElementById('milkSection');
+
 const eggCountSpan = document.getElementById('eggCount');
 const eggButton = document.getElementById('eggButton');
+const eggsPassiveUpgradeButton = document.getElementById('eggsPassiveUpgrade');
 const eggSection = document.getElementById('eggSection');
+
 const waffleCountSpan = document.getElementById('waffleCount');
 const waffleButton = document.getElementById('waffleButton');
 
@@ -55,35 +70,6 @@ let subtractResource = {
   eggs: val => eggs -= val
 };
 
-function createPassiveUpgrade(resourceName) {
-  const container = document.getElementById('passiveUpgrades');
-
-  const button = document.createElement('button');
-  button.id = `${resourceName}PassiveUpgrade`;
-  button.textContent = `Upgrade ${capitalize(resourceName)} (+1/sec) – Cost: ${passiveUpgrades[resourceName].currentCost}`;
-  button.style.margin = '5px';
-  button.disabled = true;
-
-  button.addEventListener('click', () => {
-    const cost = passiveUpgrades[resourceName].currentCost;
-    
-    if (resources[resourceName]() >= cost) {
-      subtractResource[resourceName](cost);
-
-      passiveUpgrades[resourceName].level++;
-      passiveUpgrades[resourceName].currentCost = passiveUpgrades[resourceName].baseCost * Math.pow(2, passiveUpgrades[resourceName].level);
-
-      button.textContent = `Upgrade ${capitalize(resourceName)} (+${passiveUpgrades[resourceName].level}/sec) – Cost: ${passiveUpgrades[resourceName].currentCost}`;
-      
-      updateDisplay();
-    }
-  });
-
-  container.appendChild(button);
-}
-
-
-
 function updateDisplay() {
   flourCountSpan.textContent = flour;
   flourUpgradeCostSpan.textContent = getFlourUpgradeCost();
@@ -115,10 +101,35 @@ function updateDisplay() {
   eggCountSpan.textContent = eggs;
   waffleCountSpan.textContent = waffles;
 
-  // Enable passive upgrades when resources are unlocked
-  document.getElementById('flourPassiveUpgrade').disabled = !milkUnlocked; // flour starts first
-  document.getElementById('milkPassiveUpgrade').disabled = !milkUnlocked;
-  document.getElementById('eggsPassiveUpgrade').disabled = !eggsUnlocked;
+  milkClickUpgradeCostSpan.textContent = milkClickBaseCost * Math.pow(2, milkClickUpgradeLevel);
+  eggClickUpgradeCostSpan.textContent = eggClickBaseCost * Math.pow(2, eggClickUpgradeLevel);
+
+  // Unlock upgrade buttons when the resource is unlocked
+  if (milkUnlocked) milkClickUpgradeButton.style.display = 'inline-block';
+  if (eggsUnlocked) eggClickUpgradeButton.style.display = 'inline-block';
+
+  if (milkUnlocked) {
+    document.getElementById('flourPassiveUpgrade').style.display = 'inline-block';
+    document.getElementById('milkPassiveUpgrade').style.display = 'inline-block';
+  }
+  if (eggsUnlocked) {
+    document.getElementById('eggsPassiveUpgrade').style.display = 'inline-block';
+  }
+
+  // Update passive upgrade button text
+  flourPassiveUpgradeButton.textContent = `Upgrade Flour (+${passiveUpgrades.flour.level}/sec) – Cost: ${passiveUpgrades.flour.currentCost}`;
+  milkPassiveUpgradeButton.textContent = `Upgrade Milk (+${passiveUpgrades.milk.level}/sec) – Cost: ${passiveUpgrades.milk.currentCost}`;
+  eggsPassiveUpgradeButton.textContent = `Upgrade Eggs (+${passiveUpgrades.eggs.level}/sec) – Cost: ${passiveUpgrades.eggs.currentCost}`;
+
+  // Enable buttons when unlocked
+  flourPassiveUpgradeButton.disabled = false;
+  milkPassiveUpgradeButton.disabled = !milkUnlocked;
+  eggsPassiveUpgradeButton.disabled = !eggsUnlocked;
+
+  document.getElementById("incomeDisplay").textContent =
+  passiveUpgrades.flour.level +
+  passiveUpgrades.milk.level +
+  passiveUpgrades.eggs.level;
 }
 
 function getFlourUpgradeCost() {
@@ -141,13 +152,69 @@ flourUpgradeButton.addEventListener('click', () => {
 });
 
 milkButton.addEventListener('click', () => {
-  milk++;
+  milk += milkClickPower;
   updateDisplay();
 });
 
+const milkClickUpgradeButton = document.getElementById('milkClickUpgrade');
+const milkClickUpgradeCostSpan = document.getElementById('milkClickUpgradeCost');
+
+milkClickUpgradeButton.addEventListener('click', () => {
+  const cost = milkClickBaseCost * Math.pow(2, milkClickUpgradeLevel);
+  if (milk >= cost) {
+    milk -= cost;
+    milkClickUpgradeLevel++;
+    milkClickPower++;
+    updateDisplay();
+  }
+});
+
 eggButton.addEventListener('click', () => {
-  eggs++;
+  eggs += eggClickPower;
   updateDisplay();
+});
+
+const eggClickUpgradeButton = document.getElementById('eggClickUpgrade');
+const eggClickUpgradeCostSpan = document.getElementById('eggClickUpgradeCost');
+
+eggClickUpgradeButton.addEventListener('click', () => {
+  const cost = eggClickBaseCost * Math.pow(2, eggClickUpgradeLevel);
+  if (eggs >= cost) {
+    eggs -= cost;
+    eggClickUpgradeLevel++;
+    eggClickPower++;
+    updateDisplay();
+  }
+});
+
+flourPassiveUpgradeButton.addEventListener('click', () => {
+  const cost = passiveUpgrades.flour.currentCost;
+  if (flour >= cost) {
+    flour -= cost;
+    passiveUpgrades.flour.level++;
+    passiveUpgrades.flour.currentCost = passiveUpgrades.flour.baseCost * Math.pow(2, passiveUpgrades.flour.level);
+    updateDisplay();
+  }
+});
+
+milkPassiveUpgradeButton.addEventListener('click', () => {
+  const cost = passiveUpgrades.milk.currentCost;
+  if (milk >= cost) {
+    milk -= cost;
+    passiveUpgrades.milk.level++;
+    passiveUpgrades.milk.currentCost = passiveUpgrades.milk.baseCost * Math.pow(2, passiveUpgrades.milk.level);
+    updateDisplay();
+  }
+});
+
+eggsPassiveUpgradeButton.addEventListener('click', () => {
+  const cost = passiveUpgrades.eggs.currentCost;
+  if (eggs >= cost) {
+    eggs -= cost;
+    passiveUpgrades.eggs.level++;
+    passiveUpgrades.eggs.currentCost = passiveUpgrades.eggs.baseCost * Math.pow(2, passiveUpgrades.eggs.level);
+    updateDisplay();
+  }
 });
 
 waffleButton.addEventListener('click', () => {
@@ -169,10 +236,6 @@ waffleButton.addEventListener('click', () => {
     updateDisplay();
   }
 });
-
-createPassiveUpgrade('flour');
-createPassiveUpgrade('milk');
-createPassiveUpgrade('eggs');
 
 setInterval(() => {
   flour += passiveUpgrades.flour.level;
