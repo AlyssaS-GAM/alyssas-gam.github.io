@@ -1,4 +1,3 @@
-
 let flour = 0;
 let flourPerClick = 1;
 let flourUpgradeLevel = 0;
@@ -238,6 +237,58 @@ waffleButton.addEventListener('click', () => {
   }
 });
 
+function saveGame() {
+  const saveData = {
+    flour,
+    flourPerClick,
+    flourUpgradeLevel,
+    milk,
+    milkUnlocked,
+    milkClickPower,
+    milkClickUpgradeLevel,
+    eggs,
+    eggsUnlocked,
+    eggClickPower,
+    eggClickUpgradeLevel,
+    waffles,
+    waffleCost,
+    passiveUpgrades
+  };
+  localStorage.setItem("waffleClickerSave", JSON.stringify(saveData));
+}
+
+function loadGame() {
+  const saved = localStorage.getItem("waffleClickerSave");
+  if (saved) {
+    const data = JSON.parse(saved);
+
+    flour = data.flour ?? 0;
+    flourPerClick = data.flourPerClick ?? 1;
+    flourUpgradeLevel = data.flourUpgradeLevel ?? 0;
+
+    milk = data.milk ?? 0;
+    milkUnlocked = data.milkUnlocked ?? false;
+    milkClickPower = data.milkClickPower ?? 1;
+    milkClickUpgradeLevel = data.milkClickUpgradeLevel ?? 0;
+
+    eggs = data.eggs ?? 0;
+    eggsUnlocked = data.eggsUnlocked ?? false;
+    eggClickPower = data.eggClickPower ?? 1;
+    eggClickUpgradeLevel = data.eggClickUpgradeLevel ?? 0;
+
+    waffles = data.waffles ?? 0;
+    waffleCost = data.waffleCost ?? { flour: 1, milk: 1, eggs: 1 };
+
+    passiveUpgrades = data.passiveUpgrades ?? {
+      flour: { level: 0, baseCost: 20, currentCost: 20 },
+      milk: { level: 0, baseCost: 40, currentCost: 40 },
+      eggs: { level: 0, baseCost: 60, currentCost: 60 }
+    };
+
+    updateDisplay();
+  }
+}
+
 setInterval(() => {
   flour += passiveUpgrades.flour.level;
   milk += passiveUpgrades.milk.level;
@@ -245,4 +296,7 @@ setInterval(() => {
   updateDisplay();
 }, 1000);
 
+
 updateDisplay();
+setInterval(saveGame, 10000); // Auto-save every 10 seconds
+loadGame();

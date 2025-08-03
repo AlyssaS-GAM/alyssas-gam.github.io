@@ -8,6 +8,10 @@
 </head>
 <body>
   <h1>🥞 Waffle Clicker</h1>
+ 
+  <!-- Save Buttons -->
+  <button onclick="saveGame()">Save Game</button>
+  <button onclick="localStorage.clear(); location.reload()">Reset Game</button>
 
   <!-- Resource Counters & Buttons -->
   <p>Flour: <span id="flourCount">0</span></p>
@@ -40,6 +44,7 @@
     <h3>Waffles: <span id="waffleCount">0</span></h3>
     <button id="waffleButton" disabled>Make Waffle</button>
 
-  <script src="script.js"></script>
+<script src="docs/script.js"></script>
+
 </body>
 </html>
