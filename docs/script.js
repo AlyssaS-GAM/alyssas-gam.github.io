@@ -42,6 +42,16 @@ const eggSection = document.getElementById('eggSection');
 const waffleCountSpan = document.getElementById('waffleCount');
 const waffleButton = document.getElementById('waffleButton');
 
+function flourClickUpgradeCost() {
+  return flourUpgradeBaseCost * Math.pow(2, flourUpgradeLevel);
+}
+function milkClickUpgradeCost() {
+  return milkClickBaseCost * Math.pow(2, milkClickUpgradeLevel);
+}
+function eggClickUpgradeCost() {
+  return eggClickBaseCost * Math.pow(2, eggClickUpgradeLevel);
+}
+
 
 function capitalize(word) {
   return word.charAt(0).toUpperCase() + word.slice(1);
@@ -73,7 +83,6 @@ let subtractResource = {
 
 function updateDisplay() {
   flourCountSpan.textContent = flour;
-  flourUpgradeCostSpan.textContent = getFlourUpgradeCost();
 
   // Unlock Milk
   if (!milkUnlocked && flour >= 50) {
@@ -102,8 +111,10 @@ function updateDisplay() {
   eggCountSpan.textContent = eggs;
   waffleCountSpan.textContent = waffles;
 
-  milkClickUpgradeCostSpan.textContent = milkClickBaseCost * Math.pow(2, milkClickUpgradeLevel);
-  eggClickUpgradeCostSpan.textContent = eggClickBaseCost * Math.pow(2, eggClickUpgradeLevel);
+  flourUpgradeCostSpan.textContent = flourClickUpgradeCost();
+  milkClickUpgradeCostSpan.textContent = milkClickUpgradeCost();
+  eggClickUpgradeCostSpan.textContent = eggClickUpgradeCost();
+
 
   // Unlock upgrade buttons when the resource is unlocked
   if (milkUnlocked) milkClickUpgradeButton.style.display = 'inline-block';
@@ -127,116 +138,136 @@ function updateDisplay() {
   milkPassiveUpgradeButton.disabled = !milkUnlocked;
   eggsPassiveUpgradeButton.disabled = !eggsUnlocked;
 
-  document.getElementById("incomeDisplay").textContent =
-  passiveUpgrades.flour.level +
-  passiveUpgrades.milk.level +
-  passiveUpgrades.eggs.level;
-}
-
-function getFlourUpgradeCost() {
-  return flourUpgradeBaseCost * Math.pow(2, flourUpgradeLevel);
-}
-
-flourButton.addEventListener('click', () => {
-  flour += flourPerClick;
-  updateDisplay();
-});
-
-flourUpgradeButton.addEventListener('click', () => {
-  const cost = getFlourUpgradeCost();
-  if (flour >= cost) {
-    flour -= cost;
-    flourUpgradeLevel++;
-    flourPerClick += 1;
-    updateDisplay();
+  const incomeDisplay = document.getElementById("incomeDisplay");
+  if (incomeDisplay) {
+    incomeDisplay.textContent =
+      passiveUpgrades.flour.level +
+      passiveUpgrades.milk.level +
+      passiveUpgrades.eggs.level;
   }
-});
 
-milkButton.addEventListener('click', () => {
-  milk += milkClickPower;
-  updateDisplay();
-});
+}
 
 const milkClickUpgradeButton = document.getElementById('milkClickUpgrade');
 const milkClickUpgradeCostSpan = document.getElementById('milkClickUpgradeCost');
-
-milkClickUpgradeButton.addEventListener('click', () => {
-  const cost = milkClickBaseCost * Math.pow(2, milkClickUpgradeLevel);
-  if (milk >= cost) {
-    milk -= cost;
-    milkClickUpgradeLevel++;
-    milkClickPower++;
-    updateDisplay();
-  }
-});
-
-eggButton.addEventListener('click', () => {
-  eggs += eggClickPower;
-  updateDisplay();
-});
-
 const eggClickUpgradeButton = document.getElementById('eggClickUpgrade');
 const eggClickUpgradeCostSpan = document.getElementById('eggClickUpgradeCost');
 
-eggClickUpgradeButton.addEventListener('click', () => {
-  const cost = eggClickBaseCost * Math.pow(2, eggClickUpgradeLevel);
-  if (eggs >= cost) {
-    eggs -= cost;
-    eggClickUpgradeLevel++;
-    eggClickPower++;
+if (flourButton) {
+  flourButton.addEventListener('click', () => {
+    flour += flourPerClick;
     updateDisplay();
-  }
-});
+  });
+}
 
-flourPassiveUpgradeButton.addEventListener('click', () => {
-  const cost = passiveUpgrades.flour.currentCost;
-  if (flour >= cost) {
-    flour -= cost;
-    passiveUpgrades.flour.level++;
-    passiveUpgrades.flour.currentCost = passiveUpgrades.flour.baseCost * Math.pow(2, passiveUpgrades.flour.level);
+if (flourUpgradeButton) {
+  flourUpgradeButton.addEventListener('click', () => {
+    const cost = flourClickUpgradeCost();
+    if (flour >= cost) {
+      flour -= cost;
+      flourUpgradeLevel++;
+      flourPerClick += 1;
+      updateDisplay();
+    }
+  });
+}
+
+if (milkButton) {
+  milkButton.addEventListener('click', () => {
+    milk += milkClickPower;
     updateDisplay();
-  }
-});
+  });
+}
 
-milkPassiveUpgradeButton.addEventListener('click', () => {
-  const cost = passiveUpgrades.milk.currentCost;
-  if (milk >= cost) {
-    milk -= cost;
-    passiveUpgrades.milk.level++;
-    passiveUpgrades.milk.currentCost = passiveUpgrades.milk.baseCost * Math.pow(2, passiveUpgrades.milk.level);
+if (milkClickUpgradeButton) {
+  milkClickUpgradeButton.addEventListener('click', () => {
+    const cost = milkClickUpgradeCost();
+    if (milk >= cost) {
+      milk -= cost;
+      milkClickUpgradeLevel++;
+      milkClickPower++;
+      updateDisplay();
+    }
+  });
+}
+
+if (eggButton) {
+  eggButton.addEventListener('click', () => {
+    eggs += eggClickPower;
     updateDisplay();
-  }
-});
+  });
+}
 
-eggsPassiveUpgradeButton.addEventListener('click', () => {
-  const cost = passiveUpgrades.eggs.currentCost;
-  if (eggs >= cost) {
-    eggs -= cost;
-    passiveUpgrades.eggs.level++;
-    passiveUpgrades.eggs.currentCost = passiveUpgrades.eggs.baseCost * Math.pow(2, passiveUpgrades.eggs.level);
-    updateDisplay();
-  }
-});
+if (eggClickUpgradeButton) {
+  eggClickUpgradeButton.addEventListener('click', () => {
+    const cost = eggClickUpgradeCost();
+    if (eggs >= cost) {
+      eggs -= cost;
+      eggClickUpgradeLevel++;
+      eggClickPower++;
+      updateDisplay();
+    }
+  });
+}
 
-waffleButton.addEventListener('click', () => {
-  if (
-    flour >= waffleCost.flour &&
-    milk >= waffleCost.milk &&
-    eggs >= waffleCost.eggs
-  ) {
-    flour -= waffleCost.flour;
-    milk -= waffleCost.milk;
-    eggs -= waffleCost.eggs;
-    waffles++;
+if (flourPassiveUpgradeButton) {
+  flourPassiveUpgradeButton.addEventListener('click', () => {
+    const cost = passiveUpgrades.flour.currentCost;
+    if (flour >= cost) {
+      flour -= cost;
+      passiveUpgrades.flour.level++;
+      passiveUpgrades.flour.currentCost = passiveUpgrades.flour.baseCost * Math.pow(2, passiveUpgrades.flour.level);
+      updateDisplay();
+    }
+  });
+}
 
-    // Increase future waffle costs
-    waffleCost.flour++;
-    waffleCost.milk++;
-    waffleCost.eggs++;
+if (milkPassiveUpgradeButton) {
+  milkPassiveUpgradeButton.addEventListener('click', () => {
+    const cost = passiveUpgrades.milk.currentCost;
+    if (milk >= cost) {
+      milk -= cost;
+      passiveUpgrades.milk.level++;
+      passiveUpgrades.milk.currentCost = passiveUpgrades.milk.baseCost * Math.pow(2, passiveUpgrades.milk.level);
+      updateDisplay();
+    }
+  });
+}
 
-    updateDisplay();
-  }
-});
+if (eggsPassiveUpgradeButton) {
+  eggsPassiveUpgradeButton.addEventListener('click', () => {
+    const cost = passiveUpgrades.eggs.currentCost;
+    if (eggs >= cost) {
+      eggs -= cost;
+      passiveUpgrades.eggs.level++;
+      passiveUpgrades.eggs.currentCost = passiveUpgrades.eggs.baseCost * Math.pow(2, passiveUpgrades.eggs.level);
+      updateDisplay();
+    }
+  });
+}
+
+if (waffleButton) {
+  waffleButton.addEventListener('click', () => {
+    if (
+      flour >= waffleCost.flour &&
+      milk >= waffleCost.milk &&
+      eggs >= waffleCost.eggs
+    ) {
+      flour -= waffleCost.flour;
+      milk -= waffleCost.milk;
+      eggs -= waffleCost.eggs;
+      waffles++;
+
+      // Increase future waffle costs
+      waffleCost.flour++;
+      waffleCost.milk++;
+      waffleCost.eggs++;
+
+      updateDisplay();
+    }
+  });
+}
+
 
 setInterval(() => {
   flour += passiveUpgrades.flour.level;
