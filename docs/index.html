@@ -12,10 +12,13 @@
   <h1>🥞 Waffle Clicker</h1>
 
   <!-- Save Buttons -->
-  <button onclick="saveGame()">Save Game</button>
-  <button onclick="localStorage.clear(); location.reload()">Reset Game</button>
-  <button onclick="exportSave()">Export Save</button>
-  <button onclick="importSave()">Import Save</button>
+  <div class="save-controls">
+    <button type="button" class="btn-small" onclick="saveGame()">Save Game</button>
+    <button type="button" class="btn-small" onclick="localStorage.clear(); location.reload()">Reset Game</button>
+    <button type="button" class="btn-small" onclick="exportSave()">Export Save</button>
+    <button type="button" class="btn-small" onclick="importSave()">Import Save</button>
+  </div>
+
 
   <!-- Resources -->
   <p>Flour: <span id="flourCount">0</span></p>
