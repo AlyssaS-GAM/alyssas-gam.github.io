@@ -8,10 +8,6 @@
 </head>
 <body>
   <h1>🥞 Waffle Clicker</h1>
- 
-  <!-- Save Buttons -->
-  <button onclick="saveGame()">Save Game</button>
-  <button onclick="localStorage.clear(); location.reload()">Reset Game</button>
 
   <!-- Resource Counters & Buttons -->
   <p>Flour: <span id="flourCount">0</span></p>
@@ -23,6 +19,18 @@
   <p id="eggSection" style="display: none;">Eggs: <span id="eggCount">0</span></p>
   <button id="eggButton" style="display: none;">Click for Eggs</button>
 
+  <h2>Upgrades</h2>
+  <button id="flourUpgrade">Upgrade Flour (+1) – Cost: <span id="flourUpgradeCost">10</span></button>
+  
+  <div id="passiveUpgrades">
+  <h2>Passive Upgrades</h2>
+</div>
+
+<!-- Unlocks at 50 Flour -->
+<p id="milkSection" style="display: none;">
+  Milk: <span id="milkCount">0</span>
+</p>
+<button id="milkButton" style="display: none;">Click for Milk</button>
   <!-- Click Upgrades -->
   <div id="clickUpgrades">
     <h2>Click Upgrades</h2>
@@ -31,6 +39,11 @@
     <button id="eggClickUpgrade" style="display: none;">Upgrade Egg Click (+1) – Cost: <span id="eggClickUpgradeCost">30</span></button>
   </div>
 
+<!-- Unlocks at 100 Flour & 50 Milk -->
+<p id="eggSection" style="display: none;">
+  Eggs: <span id="eggCount">0</span>
+</p>
+<button id="eggButton" style="display: none;">Click for Eggs</button>
   <!-- Passive Upgrades -->
   <div id="passiveUpgrades">
     <h2>Passive Upgrades</h2>
@@ -39,12 +52,14 @@
     <button id="eggsPassiveUpgrade" style="display: none;">Upgrade Eggs (+0/sec) – Cost: 60</button>
   </div>
 
+<p>
+  Waffles: <span id="waffleCount">0</span>
+</p>
+<button id="waffleButton" disabled>Make Waffle</button>
   <!-- Waffle Crafting -->
   <div id="waffleCrafting">
     <h3>Waffles: <span id="waffleCount">0</span></h3>
     <button id="waffleButton" disabled>Make Waffle</button>
 
-<script src="docs/script.js"></script>
-
+  <script src="script.js"></script>
 </body>
-</html>
