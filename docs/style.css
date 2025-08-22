@@ -50,3 +50,13 @@ button.btn-small:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
+
+.income-grid {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  gap: 4px 16px;
+  justify-content: center;
+  margin-top: 6px;
+  font-size: 14px;
+}
+.income-grid p { margin: 0; }

@@ -19,6 +19,13 @@
     <button type="button" class="btn-small" onclick="importSave()">Import Save</button>
   </div>
 
+    <!-- Income Counter -->
+  <div class="income-grid">
+    <p>Flour/sec: <span id="flourIncome">0</span></p>
+    <p>Milk/sec: <span id="milkIncome">0</span></p>
+    <p>Eggs/sec: <span id="eggIncome">0</span></p>
+    <p>Total/sec: <span id="incomeDisplay">0</span></p>
+  </div>
 
   <!-- Resources -->
   <p>Flour: <span id="flourCount">0</span></p>
@@ -50,7 +57,6 @@
     <button id="flourPassiveUpgrade">Upgrade Flour (+0/sec) – Cost: 20</button>
     <button id="milkPassiveUpgrade" style="display:none;">Upgrade Milk (+0/sec) – Cost: 40</button>
     <button id="eggsPassiveUpgrade" style="display:none;">Upgrade Eggs (+0/sec) – Cost: 60</button>
-    <p>Income/sec: <span id="incomeDisplay">0</span></p>
   </div>
 
   <!-- Waffle Crafting -->

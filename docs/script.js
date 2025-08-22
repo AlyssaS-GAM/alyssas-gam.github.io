@@ -23,6 +23,12 @@ let waffleCost = {
   eggs: 1
 };
 
+let passiveUpgrades = {
+  flour: { level: 0, baseCost: 20, currentCost: 20 },
+  milk: { level: 0, baseCost: 40, currentCost: 40 },
+  eggs: { level: 0, baseCost: 60, currentCost: 60 },
+};
+
 const flourCountSpan = document.getElementById('flourCount');
 const flourButton = document.getElementById('flourButton');
 const flourUpgradeButton = document.getElementById('flourUpgrade');
@@ -42,6 +48,12 @@ const eggSection = document.getElementById('eggSection');
 const waffleCountSpan = document.getElementById('waffleCount');
 const waffleButton = document.getElementById('waffleButton');
 
+const flourIncomeSpan = document.getElementById('flourIncome');
+const milkIncomeSpan  = document.getElementById('milkIncome');
+const eggIncomeSpan   = document.getElementById('eggIncome');
+const incomeDisplay   = document.getElementById('incomeDisplay'); // total
+
+
 function flourClickUpgradeCost() {
   return flourUpgradeBaseCost * Math.pow(2, flourUpgradeLevel);
 }
@@ -56,12 +68,6 @@ function eggClickUpgradeCost() {
 function capitalize(word) {
   return word.charAt(0).toUpperCase() + word.slice(1);
 }
-
-let passiveUpgrades = {
-  flour: { level: 0, baseCost: 20, currentCost: 20 },
-  milk: { level: 0, baseCost: 40, currentCost: 40 },
-  eggs: { level: 0, baseCost: 60, currentCost: 60 },
-};
 
 let resources = {
   flour: () => flour,
@@ -138,13 +144,16 @@ function updateDisplay() {
   milkPassiveUpgradeButton.disabled = !milkUnlocked;
   eggsPassiveUpgradeButton.disabled = !eggsUnlocked;
 
-  const incomeDisplay = document.getElementById("incomeDisplay");
-  if (incomeDisplay) {
-    incomeDisplay.textContent =
-      passiveUpgrades.flour.level +
-      passiveUpgrades.milk.level +
-      passiveUpgrades.eggs.level;
-  }
+  // Per-resource income/sec + total
+  const flourIncome = passiveUpgrades.flour.level; // 1 per level per second
+  const milkIncome  = passiveUpgrades.milk.level;
+  const eggIncome   = passiveUpgrades.eggs.level;
+  const totalIncome = flourIncome + milkIncome + eggIncome;
+
+  if (flourIncomeSpan) flourIncomeSpan.textContent = flourIncome;
+  if (milkIncomeSpan)  milkIncomeSpan.textContent  = milkIncome;
+  if (eggIncomeSpan)   eggIncomeSpan.textContent   = eggIncome;
+  if (incomeDisplay)   incomeDisplay.textContent   = totalIncome;
 
 }
 
@@ -267,7 +276,7 @@ if (waffleButton) {
     }
   });
 }
-// ===== Candy-Box style SAVE SYSTEM =====
+// Candy-Box style SAVE SYSTEM 
 const SAVE_KEY_V2 = "waffleClickerSaveV2";
 
 function getState() {
