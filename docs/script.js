@@ -277,7 +277,27 @@ if (waffleButton) {
   });
 }
 // Candy-Box style SAVE SYSTEM 
+
 const SAVE_KEY_V2 = "waffleClickerSaveV2";
+
+function cost(base, level) {
+  return base * Math.pow(2, level);
+}
+
+function n0(x, def = 0) {
+  return Number.isFinite(x) ? Math.max(0, x) : def;
+}
+
+function storageAvailable() {
+  try {
+    const t = "__waffle_test__";
+    localStorage.setItem(t, t);
+    localStorage.removeItem(t);
+    return true;
+  } catch {
+    return false;
+  }
+}
 
 function getState() {
   return {
@@ -301,49 +321,41 @@ function getState() {
 }
 
 function setState(d) {
-  // Defensive defaults
-  flour                = Number.isFinite(d.flour) ? d.flour : 0;
-  flourPerClick        = Number.isFinite(d.flourPerClick) ? d.flourPerClick : 1;
-  flourUpgradeLevel    = Number.isFinite(d.flourUpgradeLevel) ? d.flourUpgradeLevel : 0;
+  // Core stats 
+  flour              = n0(d.flour, 0);
+  flourPerClick      = n0(d.flourPerClick, 1);
+  flourUpgradeLevel  = Math.max(0, Math.floor(d.flourUpgradeLevel || 0));
 
-  milk                 = Number.isFinite(d.milk) ? d.milk : 0;
-  milkUnlocked         = !!d.milkUnlocked;
-  milkClickPower       = Number.isFinite(d.milkClickPower) ? d.milkClickPower : 1;
-  milkClickUpgradeLevel= Number.isFinite(d.milkClickUpgradeLevel) ? d.milkClickUpgradeLevel : 0;
+  milk               = n0(d.milk, 0);
+  milkUnlocked       = !!d.milkUnlocked;
+  milkClickPower     = n0(d.milkClickPower, 1);
+  milkClickUpgradeLevel = Math.max(0, Math.floor(d.milkClickUpgradeLevel || 0));
 
-  eggs                 = Number.isFinite(d.eggs) ? d.eggs : 0;
-  eggsUnlocked         = !!d.eggsUnlocked;
-  eggClickPower        = Number.isFinite(d.eggClickPower) ? d.eggClickPower : 1;
-  eggClickUpgradeLevel = Number.isFinite(d.eggClickUpgradeLevel) ? d.eggClickUpgradeLevel : 0;
+  eggs               = n0(d.eggs, 0);
+  eggsUnlocked       = !!d.eggsUnlocked;
+  eggClickPower      = n0(d.eggClickPower, 1);
+  eggClickUpgradeLevel = Math.max(0, Math.floor(d.eggClickUpgradeLevel || 0));
 
-  waffles              = Number.isFinite(d.waffles) ? d.waffles : 0;
+  waffles            = n0(d.waffles, 0);
 
-  // Waffle cost
+  // Waffle cost 
   const wc = d.waffleCost || {};
   waffleCost = {
-    flour: Number.isFinite(wc.flour) ? wc.flour : 1,
-    milk:  Number.isFinite(wc.milk)  ? wc.milk  : 1,
-    eggs:  Number.isFinite(wc.eggs)  ? wc.eggs  : 1
+    flour: n0(wc.flour, 1),
+    milk:  n0(wc.milk, 1),
+    eggs:  n0(wc.eggs, 1)
   };
 
-  // Passive upgrades
+  // Passive upgrades: trust only level; derive currentCost
   const pu = d.passiveUpgrades || {};
+  const fLvl = Math.max(0, Math.floor((pu.flour?.level) ?? 0));
+  const mLvl = Math.max(0, Math.floor((pu.milk?.level)  ?? 0));
+  const eLvl = Math.max(0, Math.floor((pu.eggs?.level)  ?? 0));
+
   passiveUpgrades = {
-    flour: {
-      level: Number.isFinite(pu.flour?.level) ? pu.flour.level : 0,
-      baseCost: 20,
-      currentCost: Number.isFinite(pu.flour?.currentCost) ? pu.flour.currentCost : 20
-    },
-    milk: {
-      level: Number.isFinite(pu.milk?.level) ? pu.milk.level : 0,
-      baseCost: 40,
-      currentCost: Number.isFinite(pu.milk?.currentCost) ? pu.milk.currentCost : 40
-    },
-    eggs: {
-      level: Number.isFinite(pu.eggs?.level) ? pu.eggs.level : 0,
-      baseCost: 60,
-      currentCost: Number.isFinite(pu.eggs?.currentCost) ? pu.eggs.currentCost : 60
-    }
+    flour: { level: fLvl, baseCost: 20, currentCost: cost(20, fLvl) },
+    milk:  { level: mLvl, baseCost: 40, currentCost: cost(40, mLvl) },
+    eggs:  { level: eLvl, baseCost: 60, currentCost: cost(60, eLvl) },
   };
 }
 
@@ -367,13 +379,15 @@ function decodeSave(code) {
 }
 
 function saveToLocal() {
+  if (!storageAvailable()) return;
   const code = encodeSave(getState());
   localStorage.setItem(SAVE_KEY_V2, code);
-  // console.log("[Save] Written");
 }
 
 function loadFromLocal() {
-  // Prefer v2 (encoded); migrate old JSON if present
+  if (!storageAvailable()) return false;
+
+  // Prefer v2 (encoded)
   const v2 = localStorage.getItem(SAVE_KEY_V2);
   if (v2) {
     try {
@@ -384,13 +398,14 @@ function loadFromLocal() {
       console.warn("[Save] Failed to decode v2 save:", e);
     }
   }
+
+  // Migrate old JSON save
   const old = localStorage.getItem("waffleClickerSave");
   if (old) {
     try {
       const data = JSON.parse(old);
       setState(data);
-      // migrate to v2 format
-      saveToLocal();
+      saveToLocal(); // write as v2
       return true;
     } catch (e) {
       console.warn("[Save] Failed to parse old save:", e);
@@ -399,7 +414,7 @@ function loadFromLocal() {
   return false;
 }
 
-// Public (for your HTML buttons)
+// Public (for HTML buttons)
 function saveGame() {
   saveToLocal();
   alert("Game saved!");
@@ -422,11 +437,14 @@ function importSave() {
   }
 }
 
-// Expose for inline onclick if you want to add buttons
+// Expose for inline onclick
 window.saveGame = saveGame;
 window.exportSave = exportSave;
 window.importSave = importSave;
-// ===== end SAVE SYSTEM =====
+
+// Save on tab close (reduces chance of losing last few seconds)
+window.addEventListener('beforeunload', saveToLocal);
+// End SAVE SYSTEM 
 
 
 setInterval(() => {
@@ -436,7 +454,7 @@ setInterval(() => {
   updateDisplay();
 }, 1000);
 
-// autosave every 10 seconds
+// Autosave every 10 seconds
 setInterval(saveToLocal, 10000);
 
 loadFromLocal();
