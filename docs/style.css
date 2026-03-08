@@ -21,3 +21,66 @@ nav a {
 
 section { padding: 3rem 0; border-top: 1px solid #333; }
 h2 { margin-bottom: 1rem; }
+
+.project-card {
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.project-header {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.project-header h3 { font-size: 1.4rem; }
+
+.project-tag {
+  font-size: 0.75rem;
+  color: #7df;
+  background: #0a2030;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.project-desc {
+  color: #bbb;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.project-highlights {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.highlight {
+  display: flex;
+  gap: 0.75rem;
+  font-size: 0.9rem;
+}
+
+.highlight .label {
+  color: #7df;
+  min-width: 120px;
+  font-weight: bold;
+}
+
+.project-link {
+  display: inline-block;
+  color: #111;
+  background: #7df;
+  padding: 0.4rem 1rem;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.project-link:hover { background: #9ef; }
