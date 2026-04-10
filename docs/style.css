@@ -1,86 +1,166 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
-  font-family: Times, Times New Roman, serif;
+  font-family: 'DM Sans', Times, serif;
   background: #111;
   color: #eee;
   max-width: 900px;
   margin: 0 auto;
   padding: 2rem;
+  line-height: 1.7;
 }
 
+/* ── Header ── */
 header { text-align: center; padding: 3rem 0; }
-header h1 { font-size: 2.5rem; }
-header p  { color: #aaa; margin: 0.5rem 0 1rem; }
+
+.header-tag {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.75rem;
+  color: #5bf0a0;
+  letter-spacing: 0.1em;
+  margin-bottom: 1rem;
+}
+
+header h1 { font-size: 2.5rem; font-family: 'Space Mono', monospace; }
+header p  { color: #aaa; margin: 0.5rem 0 1rem; font-size: 1rem; max-width: 480px; margin-left: auto; margin-right: auto; }
 
 nav a {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
   color: #7df;
-  margin: 0 1rem;
+  margin: 0 0.5rem;
   text-decoration: none;
+  border: 1px solid #2a2a32;
+  padding: 0.3rem 0.8rem;
+  border-radius: 3px;
+  transition: border-color 0.2s, color 0.2s;
+}
+nav a:hover { color: #5bf0a0; border-color: #2a6648; }
+
+/* ── Sections ── */
+section { padding: 3rem 0; border-top: 1px solid #333; }
+h2 { 
+  font-family: 'Space Mono', monospace;
+  margin-bottom: 1.25rem; 
+  font-size: 1.4rem;
 }
 
-section { padding: 3rem 0; border-top: 1px solid #333; }
-h2 { margin-bottom: 1rem; }
+/* ── About ── */
+section#about p {
+  color: #aaa;
+  margin-bottom: 1rem;
+  font-size: 0.975rem;
+}
+section#about p:last-of-type { margin-bottom: 0; }
+section#about strong { color: #eee; font-weight: 500; }
 
+.about-tags {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  margin-top: 1.75rem;
+  padding-top: 1.75rem;
+  border-top: 1px solid #222;
+}
+
+.tag-group { display: flex; flex-direction: column; gap: 0.4rem; }
+
+.tag-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  color: #444;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 0.2rem;
+}
+
+.tag {
+  display: inline-block;
+  font-size: 0.78rem;
+  background: #1a1a1f;
+  color: #888;
+  border: 1px solid #2a2a32;
+  padding: 0.2rem 0.65rem;
+  border-radius: 3px;
+  width: fit-content;
+}
+
+/* ── Project Card ── */
 .project-card {
-  background: #1a1a1a;
-  border: 1px solid #333;
-  border-radius: 8px;
-  padding: 1.5rem;
-  margin-bottom: 2rem;
+  background: #161618;
+  border: 1px solid #2a2a32;
+  border-radius: 6px;
+  padding: 1.75rem;
 }
 
 .project-header {
   display: flex;
   align-items: baseline;
   gap: 1rem;
-  margin-bottom: 0.75rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
 }
 
-.project-header h3 { font-size: 1.4rem; }
+.project-header h3 {
+  font-family: 'Space Mono', monospace;
+  font-size: 1.3rem;
+}
 
 .project-tag {
-  font-size: 0.75rem;
-  color: #7df;
-  background: #0a2030;
-  padding: 2px 8px;
-  border-radius: 4px;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.72rem;
+  color: #555;
 }
 
 .project-desc {
-  color: #bbb;
-  line-height: 1.6;
-  margin-bottom: 1rem;
+  color: #999;
+  font-size: 0.95rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #222;
+  line-height: 1.65;
 }
 
 .project-highlights {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  margin-bottom: 1.25rem;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
 }
 
-.highlight {
-  display: flex;
-  gap: 0.75rem;
+.highlight { display: flex; flex-direction: column; gap: 0.2rem; }
+
+.label {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  color: #5bf0a0;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.highlight span:not(.label) {
   font-size: 0.9rem;
-}
-
-.highlight .label {
-  color: #7df;
-  min-width: 120px;
-  font-weight: bold;
+  color: #999;
+  line-height: 1.6;
 }
 
 .project-link {
   display: inline-block;
-  color: #111;
-  background: #7df;
-  padding: 0.4rem 1rem;
-  border-radius: 4px;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  color: #5bf0a0;
   text-decoration: none;
-  font-weight: bold;
-  font-size: 0.9rem;
+  border: 1px solid #2a6648;
+  padding: 0.5rem 1.1rem;
+  border-radius: 3px;
+  transition: background 0.2s;
 }
+.project-link:hover { background: rgba(91, 240, 160, 0.07); }
 
-.project-link:hover { background: #9ef; }
+/* ── Contact ── */
+section#contact p { 
+  color: #aaa; 
+  font-size: 0.95rem; 
+  margin-bottom: 0.5rem; 
+}
+section#contact a { color: lightblue; }
