@@ -164,3 +164,35 @@ section#contact p {
   margin-bottom: 0.5rem; 
 }
 section#contact a { color: lightblue; }
+
+/* ── Project Screenshots ── */
+.project-screenshots {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+@media (max-width: 600px) {
+  .project-screenshots { grid-template-columns: 1fr; }
+}
+
+.screenshot-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.screenshot-item img {
+  width: 100%;
+  border-radius: 4px;
+  border: 1px solid #2a2a32;
+  display: block;
+}
+
+.screenshot-caption {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  color: #444;
+  letter-spacing: 0.06em;
+}
