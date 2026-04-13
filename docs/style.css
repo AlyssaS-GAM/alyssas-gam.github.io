@@ -165,34 +165,100 @@ section#contact p {
 }
 section#contact a { color: lightblue; }
 
-/* ── Project Screenshots ── */
-.project-screenshots {
+/* ── Project Layout ── */
+.project-layout {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
+  grid-template-columns: 140px 1fr 140px;
+  gap: 1.25rem;
+  align-items: start;
 }
 
-@media (max-width: 600px) {
-  .project-screenshots { grid-template-columns: 1fr; }
+@media (max-width: 680px) {
+  .project-layout { grid-template-columns: 1fr; }
+  .project-photos { flex-direction: row; flex-wrap: wrap; justify-content: center; }
 }
 
-.screenshot-item {
+/* ── Photo Sidebars ── */
+.project-photos {
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: 1rem;
+  padding-top: 0.25rem;
 }
 
-.screenshot-item img {
-  width: 100%;
-  border-radius: 4px;
+.photo-item {
+  background: #1e1e22;
   border: 1px solid #2a2a32;
-  display: block;
+  border-radius: 4px;
+  padding: 0.4rem 0.4rem 1.5rem;
+  cursor: pointer;
+  transition: transform 0.25s, box-shadow 0.25s;
+  position: relative;
+  z-index: 1;
 }
 
-.screenshot-caption {
+.photo-1 { transform: rotate(-2.5deg); }
+.photo-2 { transform: rotate(2deg); }
+.photo-3 { transform: rotate(-1.5deg); }
+
+.photo-item:hover {
+  z-index: 10;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+}
+.photo-1:hover { transform: rotate(-2.5deg) scale(1.05); }
+.photo-2:hover { transform: rotate(2deg) scale(1.05); }
+.photo-3:hover { transform: rotate(-1.5deg) scale(1.05); }
+
+.photo-item img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 2px;
+}
+
+.photo-3 img {
+  max-height: 160px;
+  object-fit: cover;
+  object-position: top;
+}
+
+.photo-caption {
+  display: block;
   font-family: 'Space Mono', monospace;
-  font-size: 0.65rem;
-  color: #444;
-  letter-spacing: 0.06em;
+  font-size: 0.58rem;
+  color: #555;
+  text-align: center;
+  margin-top: 0.4rem;
+  letter-spacing: 0.05em;
+}
+
+/* Enlarged — click to expand */
+.photo-item.enlarged {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(0deg) !important;
+  width: min(90vw, 720px);
+  max-height: 90vh;
+  overflow-y: auto;
+  z-index: 1000;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.85);
+  padding: 0.75rem 0.75rem 2.5rem;
+  background: #1e1e22;
+}
+
+.photo-item.enlarged img {
+  max-height: none;
+  object-fit: unset;
+}
+
+.photo-item.enlarged::before {
+  content: "click to close";
+  display: block;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.6rem;
+  color: #5bf0a0;
+  text-align: right;
+  margin-bottom: 0.4rem;
+  letter-spacing: 0.08em;
 }
